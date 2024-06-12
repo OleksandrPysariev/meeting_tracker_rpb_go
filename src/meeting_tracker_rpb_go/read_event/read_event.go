@@ -2,9 +2,6 @@ package read_event
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"
@@ -14,6 +11,7 @@ var BACKLIGHT = true
 var ON = true
 
 func RunReadEvent() {
+	fmt.Print("Running RunReadEvent...")
 	currentlyInTheMeeting := false
 	event := read_event.ParseEvent()
 	lastCalled := read_event.TimeNow()
@@ -58,16 +56,4 @@ func RunReadEvent() {
 	// TODO: implement LCD commands
 	// https://github.com/d2r2/go-hd44780
 	// fmt.Printf("Received a message: %#v", event)
-}
-
-func init() {
-	fmt.Print("Application start...\n")
-    c := make(chan os.Signal, 1)
-    signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-    go func() {
-        <-c
-        // Run Cleanup
-		fmt.Print("\nApplication shut down.\n")
-        os.Exit(1)
-    }()
 }
