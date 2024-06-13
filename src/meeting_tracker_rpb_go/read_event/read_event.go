@@ -47,6 +47,9 @@ func RunReadEvent() {
 	// Instantiate lcd screen
 	lcd, err := device.NewLcd(i2c, device.LCD_16x2)
 	checkError(err)
+	// Enable screen backlight
+	err = lcd.BacklightOn()
+	checkError(err)
 
 
 	currentlyInTheMeeting := false
@@ -79,7 +82,7 @@ func RunReadEvent() {
 			line1 += read_event.TimeNow().Format("15:04:05")
 			line1 += "    "
 
-			line2 := ""
+			line2 := " "
 			// read_event.Say(line1, line2)
 			fmt.Print(line1)
 			fmt.Print(line2)
