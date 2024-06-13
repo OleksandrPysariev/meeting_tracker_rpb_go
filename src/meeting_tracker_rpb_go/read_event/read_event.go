@@ -81,6 +81,8 @@ func RunReadEvent() {
 
 			line2 := ""
 			// read_event.Say(line1, line2)
+			fmt.Print(line1)
+			fmt.Print(line2)
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			checkError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
