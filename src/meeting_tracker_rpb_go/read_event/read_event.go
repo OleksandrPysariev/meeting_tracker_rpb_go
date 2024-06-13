@@ -41,7 +41,7 @@ func RunReadEvent() {
 	fmt.Print("Running RunReadEvent...")
 	
 	// Connect to i2c bus
-	i2c, err := i2c.NewI2C(0x27, 2)
+	i2c, err := i2c.NewI2C(0x27, 1)
 	checkError(err)
 	defer i2c.Close()
 	// Instantiate lcd screen
@@ -91,6 +91,8 @@ func RunReadEvent() {
 			line1 += event.Time
 			line2 := event.Description
 			// read_event.Say(line1, line2)
+			fmt.Print(line1)
+			fmt.Print(line2)
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			checkError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
