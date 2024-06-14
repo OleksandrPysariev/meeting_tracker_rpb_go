@@ -17,23 +17,23 @@ var wg sync.WaitGroup
 
 func main() {
 	logger.ChangePackageLogLevel("i2c", logger.InfoLevel)
-	fmt.Print("Starting main\n")
+	fmt.Print("[main] Starting main\n")
 	wg.Add(1)
 	go set_event.RunSetEvent()
-	fmt.Print("Ran RunSetEvent\n")
+	fmt.Print("[main] Ran RunSetEvent\n")
 	go read_event.RunReadEvent()
-	fmt.Print("Ran RunReadEvent\n")
+	fmt.Print("[main] Ran RunReadEvent\n")
 	wg.Wait()
 }
 
 func init() {
-	fmt.Print("Application start...\n")
+	fmt.Print("[init] Application start...\n")
     c := make(chan os.Signal, 1)
     signal.Notify(c, os.Interrupt, syscall.SIGTERM)
     go func() {
         <-c
         wg.Done()
-		fmt.Print("\nApplication shut down.\n")
+		fmt.Print("\n[init] Application shut down.\n")
         os.Exit(1)
     }()
 }

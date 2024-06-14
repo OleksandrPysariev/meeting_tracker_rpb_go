@@ -47,7 +47,7 @@ func switch_on_off(lcd device.Lcd) {
 }
 
 func RunReadEvent() {
-	fmt.Print("Running RunReadEvent...")
+	fmt.Print("[read_event] Running RunReadEvent...\n")
 
 	// Connect to i2c bus
 	i2c, err := i2c.NewI2C(0x27, 1)

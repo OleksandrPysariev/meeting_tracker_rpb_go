@@ -15,10 +15,10 @@ func setEvent() {
 }
 
 func RunSetEvent() {
-	fmt.Print("Starting setEvent...")
+	fmt.Print("[set_event] Starting setEvent...\n")
 	for {
 		setEvent()
-		fmt.Print("event.json stored!")
+		fmt.Print("[set_event] event.json stored!\n")
 		time.Sleep(60 * time.Second)
 	}
 }
