@@ -2,13 +2,22 @@ package read_event
 
 import (
 	"fmt"
-	"time"
 	"log"
+	"time"
 
 	device "github.com/d2r2/go-hd44780"
 	"github.com/d2r2/go-i2c"
+	"github.com/d2r2/go-logger"
 
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"
+)
+
+// You can manage verbosity of log output
+// in the package by changing last parameter value
+// (comment/uncomment corresponding lines).
+var lg = logger.NewPackageLogger("read_event",
+	// logger.DebugLevel,
+	logger.InfoLevel,
 )
 
 var BACKLIGHT = true
@@ -20,7 +29,7 @@ func checkError(err error) {
 	}
 }
 
-func switch_backlight(lcd device.Lcd){
+func switch_backlight(lcd device.Lcd) {
 	BACKLIGHT = !BACKLIGHT
 	if BACKLIGHT {
 		err := lcd.BacklightOn()
@@ -31,15 +40,15 @@ func switch_backlight(lcd device.Lcd){
 	}
 }
 
-func switch_on_off(lcd device.Lcd){
-    ON = !ON
-    switch_backlight(lcd)
-    lcd.Clear()
+func switch_on_off(lcd device.Lcd) {
+	ON = !ON
+	switch_backlight(lcd)
+	lcd.Clear()
 }
 
 func RunReadEvent() {
 	fmt.Print("Running RunReadEvent...")
-	
+
 	// Connect to i2c bus
 	i2c, err := i2c.NewI2C(0x27, 1)
 	checkError(err)
@@ -50,7 +59,6 @@ func RunReadEvent() {
 	// Enable screen backlight
 	err = lcd.BacklightOn()
 	checkError(err)
-
 
 	currentlyInTheMeeting := false
 	event := read_event.ParseEvent()
@@ -81,23 +89,19 @@ func RunReadEvent() {
 			line1 := "    "
 			line1 += read_event.TimeNow().Format("15:04:05")
 			line1 += "    "
-
+			// lcd can't show empty message so " " is showed
 			line2 := " "
-			// read_event.Say(line1, line2)
-			fmt.Print(line1)
-			fmt.Print(line2)
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			checkError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
 			checkError(err)
 		} else {
 			line1 := read_event.TimeNow().Format("15:04:05")
+			// lcd can't show empty message so " " is showed
 			line1 += " "
 			line1 += event.Time
 			line2 := event.Description
 			// read_event.Say(line1, line2)
-			fmt.Print(line1)
-			fmt.Print(line2)
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			checkError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
