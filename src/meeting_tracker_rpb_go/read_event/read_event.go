@@ -25,7 +25,7 @@ var lg = logger.NewPackageLogger("read_event",
 
 var (
 	// Use mcu pin 40, corresponds to GPIO 21 on the pi
-	pin = rpio.Pin(40)
+	pin = rpio.Pin(21)
 )
 var BACKLIGHT = true
 var ON = true
