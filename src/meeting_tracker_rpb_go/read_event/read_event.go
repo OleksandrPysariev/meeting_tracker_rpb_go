@@ -20,9 +20,6 @@ var lg = logger.NewPackageLogger("read_event",
 	logger.InfoLevel,
 )
 
-// button = Button(21)
-// button.when_pressed = lambda: switch_on_off(lcd)
-
 var (
 	// Use mcu pin 40, corresponds to GPIO 21 on the pi
 	pin = rpio.Pin(21)
