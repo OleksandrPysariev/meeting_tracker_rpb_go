@@ -105,7 +105,7 @@ func RunReadEvent() {
 			line1 += utils.TimeNow().Format("15:04:05")
 			line1 += "    "
 			// lcd can't show empty message so " " is showed
-			line2 := " "
+			line2 := "                " // 16 empty strings to clear the line
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			utils.CheckError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
