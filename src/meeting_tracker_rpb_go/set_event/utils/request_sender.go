@@ -3,18 +3,34 @@ package utils
 import (
 	"fmt"
 	"io"
+	"time"
 	"net/http"
 	"os"
 )
 
-const requestURL = "http://202.61.206.185/event"
-const filename = "event.json"
+const (
+	requestURL = "http://202.61.206.185/event"
+	filename = "event.json"
+	maxRetries = 50
+	retryDelay = 30 * time.Second
+)
 
 func ReadResponseBody() []byte {
-	response, err := http.Get(requestURL)
-	if err != nil {
-		fmt.Printf("[utils] error making http request: %s\n", err)
-		os.Exit(1)
+	// response, err := http.Get(requestURL)
+	// if err != nil {
+	// 	fmt.Printf("[utils] error making http request: %s\n", err)
+	// 	os.Exit(1)
+	// }
+	var response *http.Response
+	var err error
+	
+	for attempts := 0; attempts < maxRetries; attempts++ {
+		response, err = http.Get(requestURL)
+		if err == nil {
+			break
+		}
+		fmt.Printf("[utils] error making http request (attempt %d/%d): %s\n", attempts+1, maxRetries, err)
+		time.Sleep(retryDelay)
 	}
 	defer response.Body.Close()
 	bodyBytes, err := io.ReadAll(response.Body)
