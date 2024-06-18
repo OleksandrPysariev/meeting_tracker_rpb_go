@@ -15,7 +15,7 @@ import (
         "github.com/stianeikeland/go-rpio"
 )
 
-func main() {
+func Play() {
         err := rpio.Open()
         if err != nil {
                 os.Exit(1)
@@ -24,8 +24,6 @@ func main() {
 
         pin := rpio.Pin(19)
         playTune(pin)
-        //BassVoice(pin)
-        //middleVoice(pin)
 }
 
 func middleVoice(pin rpio.Pin) {

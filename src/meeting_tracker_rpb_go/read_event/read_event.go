@@ -7,9 +7,10 @@ import (
 	device "github.com/d2r2/go-hd44780"
 	"github.com/d2r2/go-i2c"
 	"github.com/d2r2/go-logger"
-	"github.com/stianeikeland/go-rpio/v4"
+	"github.com/stianeikeland/go-rpio"
 
 	utils "github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"
+	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/buzzer"
 )
 
 // You can manage verbosity of log output
@@ -46,6 +47,7 @@ func switch_on_off(lcd device.Lcd) {
 
 func RunReadEvent() {
 	fmt.Print("[read_event] Running RunReadEvent...\n")
+	// buzzer.Play()
 
 	// Open and map memory to access gpio, check for errors
 	err := rpio.Open()
@@ -84,7 +86,7 @@ func RunReadEvent() {
 		// Monitor when the meeting starts to get the new meeting when it ends
 		if !currentlyInTheMeeting && event.Start.Before(now) && event.End.After(now) {
 			currentlyInTheMeeting = true
-			// todo: play melody
+			go buzzer.Play()
 		}
 		// Get new meeting to show if you just finished a meeting
 		if currentlyInTheMeeting && event.End.Before(now) {
