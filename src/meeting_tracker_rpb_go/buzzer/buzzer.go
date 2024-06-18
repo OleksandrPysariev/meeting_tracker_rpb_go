@@ -10,18 +10,11 @@ Connect a LED with resistor from pin 35 to ground.
 package buzzer
 
 import (
-        "os"
         "github.com/a-h/beeper"
         "github.com/stianeikeland/go-rpio"
 )
 
 func Play() {
-        err := rpio.Open()
-        if err != nil {
-                os.Exit(1)
-        }
-        defer rpio.Close()
-
         pin := rpio.Pin(19)
         playTune(pin)
 }
