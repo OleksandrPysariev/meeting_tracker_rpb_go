@@ -66,7 +66,7 @@ func RunReadEvent() {
 	// Instantiate lcd screen
 	lcd, err := device.NewLcd(i2c, device.LCD_16x2)
 	utils.CheckError(err)
-	defer lcd.Clear()
+	lcd.Clear()
 	// Enable screen backlight
 	err = lcd.BacklightOn()
 	utils.CheckError(err)
