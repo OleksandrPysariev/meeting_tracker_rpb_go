@@ -9,8 +9,8 @@ import (
 	"github.com/d2r2/go-logger"
 	"github.com/stianeikeland/go-rpio"
 
-	utils "github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/buzzer"
+	utils "github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"
 )
 
 // You can manage verbosity of log output
@@ -66,6 +66,7 @@ func RunReadEvent() {
 	// Instantiate lcd screen
 	lcd, err := device.NewLcd(i2c, device.LCD_16x2)
 	utils.CheckError(err)
+	defer lcd.Clear()
 	// Enable screen backlight
 	err = lcd.BacklightOn()
 	utils.CheckError(err)
