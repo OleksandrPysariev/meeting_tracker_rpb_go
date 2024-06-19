@@ -54,7 +54,7 @@ func RunReadEvent() {
 	pin := rpio.Pin(21)
 	pin.Input()
 	pin.PullUp()
-	pin.Detect(rpio.FallEdge) // enable falling edge event detection
+	pin.Detect(rpio.RiseEdge) // enable falling edge event detection
 
 	// Connect to i2c bus
 	i2c, err := i2c.NewI2C(0x27, 1)
@@ -74,8 +74,8 @@ func RunReadEvent() {
 	lastCalled := utils.TimeNow()
 	for {
 		if pin.EdgeDetected() { // check if event occured
-			fmt.Print("Button press activated!")
-			time.Sleep(time.Second / 4)
+			fmt.Printf("[%s] Button press activated!\n", utils.TimeNow().Format("15:04:05"))
+			time.Sleep(time.Second)
 			switch_on_off(lcd)
 		}
 		if !ON {
