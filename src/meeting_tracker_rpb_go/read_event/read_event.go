@@ -21,14 +21,10 @@ var lg = logger.NewPackageLogger("read_event",
 	logger.InfoLevel,
 )
 
-var (
-	// Use mcu pin 40, corresponds to GPIO 21 on the pi
-	pin = rpio.Pin(21)
-)
 var BACKLIGHT = true
 var ON = true
 
-func switch_backlight(lcd device.Lcd) {
+func switch_backlight(lcd *device.Lcd) {
 	BACKLIGHT = !BACKLIGHT
 	if BACKLIGHT {
 		err := lcd.BacklightOn()
@@ -39,7 +35,7 @@ func switch_backlight(lcd device.Lcd) {
 	}
 }
 
-func switch_on_off(lcd device.Lcd) {
+func switch_on_off(lcd *device.Lcd) {
 	ON = !ON
 	lcd.Clear()
 	switch_backlight(lcd)
@@ -47,13 +43,15 @@ func switch_on_off(lcd device.Lcd) {
 
 func RunReadEvent() {
 	fmt.Print("[read_event] Running RunReadEvent...\n")
-	// buzzer.Play()
 
 	// Open and map memory to access gpio, check for errors
 	err := rpio.Open()
 	utils.CheckError(err)
 	// Unmap gpio memory when done
 	defer rpio.Close()
+
+	// Use mcu pin 40, corresponds to GPIO 21 on the pi
+	pin := rpio.Pin(21)
 	pin.Input()
 	pin.PullUp()
 	pin.Detect(rpio.FallEdge) // enable falling edge event detection
@@ -77,7 +75,7 @@ func RunReadEvent() {
 	for {
 		if pin.EdgeDetected() { // check if event occured
 			time.Sleep(time.Second / 4)
-			switch_on_off(*lcd)
+			switch_on_off(lcd)
 		}
 		if !ON {
 			time.Sleep(1 * time.Second)
@@ -112,11 +110,9 @@ func RunReadEvent() {
 			utils.CheckError(err)
 		} else {
 			line1 := utils.TimeNow().Format("15:04:05")
-			// lcd can't show empty message so " " is showed
 			line1 += " "
 			line1 += event.Time
 			line2 := event.Description
-			// read_event.Say(line1, line2)
 			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 			utils.CheckError(err)
 			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)

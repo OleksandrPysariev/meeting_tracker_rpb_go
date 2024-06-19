@@ -16,11 +16,6 @@ const (
 )
 
 func ReadResponseBody() []byte {
-	// response, err := http.Get(requestURL)
-	// if err != nil {
-	// 	fmt.Printf("[utils] error making http request: %s\n", err)
-	// 	os.Exit(1)
-	// }
 	var response *http.Response
 	var err error
 	
