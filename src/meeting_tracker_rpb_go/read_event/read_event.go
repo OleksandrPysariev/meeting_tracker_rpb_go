@@ -74,6 +74,7 @@ func RunReadEvent() {
 	lastCalled := utils.TimeNow()
 	for {
 		if pin.EdgeDetected() { // check if event occured
+			fmt.Print("Button press activated!")
 			time.Sleep(time.Second / 4)
 			switch_on_off(lcd)
 		}
