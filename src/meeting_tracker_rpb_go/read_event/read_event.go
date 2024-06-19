@@ -3,6 +3,7 @@ package read_event
 import (
 	"fmt"
 	"time"
+	"strings"
 
 	device "github.com/d2r2/go-hd44780"
 	"github.com/d2r2/go-i2c"
@@ -93,36 +94,31 @@ func RunReadEvent() {
 			currentlyInTheMeeting = false
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
-			// clear lcd instead of adding empty characteds
-			// at the end of the meeting description
-			lcd.Clear()
 		}
 		// Refresh current meeting every 2 minutes to track new meetings throughout the day
 		if now.Sub(lastCalled).Seconds() > 120 {
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
 		}
+		var (
+			line1, line2 string
+		)
 		if !utils.DateEqual(event.Start, utils.TimeNow()) {
-			line1 := "    "
+			line1 = strings.Repeat(" ", 4)
 			line1 += utils.TimeNow().Format("15:04:05")
-			line1 += "    "
+			line1 += strings.Repeat(" ", 4)
 			// lcd can't show empty message so " " is showed
-			line2 := "                " // 16 empty strings to clear the line
-			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
-			utils.CheckError(err)
-			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
-			utils.CheckError(err)
+			line2 = strings.Repeat(" ", 16) // 16 empty strings to clear the line
 		} else {
-			line1 := utils.TimeNow().Format("15:04:05")
+			line1 = utils.TimeNow().Format("15:04:05")
 			line1 += " "
 			line1 += event.Time
-			line2 := event.Description
-			err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
-			utils.CheckError(err)
-			err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
-			utils.CheckError(err)
-
+			line2 = utils.PadString(event.Description, 16, " ")
 		}
+		err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
+		utils.CheckError(err)
+		err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
+		utils.CheckError(err)
 		time.Sleep(10 * time.Millisecond)
 	}
 }
