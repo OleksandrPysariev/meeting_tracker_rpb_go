@@ -93,6 +93,9 @@ func RunReadEvent() {
 			currentlyInTheMeeting = false
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
+			// clear lcd instead of adding empty characteds
+			// at the end of the meeting description
+			lcd.Clear()
 		}
 		// Refresh current meeting every 2 minutes to track new meetings throughout the day
 		if now.Sub(lastCalled).Seconds() > 120 {
