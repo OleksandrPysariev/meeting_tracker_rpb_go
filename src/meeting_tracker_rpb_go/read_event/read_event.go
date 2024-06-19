@@ -7,7 +7,7 @@ import (
 	device "github.com/d2r2/go-hd44780"
 	"github.com/d2r2/go-i2c"
 	"github.com/d2r2/go-logger"
-	"github.com/stianeikeland/go-rpio"
+	"github.com/stianeikeland/go-rpio/v4"
 
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/buzzer"
 	utils "github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event/utils"

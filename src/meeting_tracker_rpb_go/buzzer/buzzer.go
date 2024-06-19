@@ -1,17 +1,8 @@
-/*
-
-A PWM example by @Drahoslav7, using the go-rpio library
-
-Toggles a LED on physical pin 35 (GPIO pin 19)
-Connect a LED with resistor from pin 35 to ground.
-
-*/
-
 package buzzer
 
 import (
-        "github.com/a-h/beeper"
-        "github.com/stianeikeland/go-rpio"
+        "github.com/OleksandrPysariev/meeting_tracker_rpb_go/buzzer/utils"
+        "github.com/stianeikeland/go-rpio/v4"
 )
 
 func Play() {
