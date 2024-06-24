@@ -91,6 +91,10 @@ func RunReadEvent() {
 		}
 		// Get new meeting to show if you just finished a meeting
 		if currentlyInTheMeeting && event.End.Before(now) {
+			// clear second line
+			err = lcd.ShowMessage(strings.Repeat(" ", 16), device.SHOW_LINE_2)
+			utils.CheckError(err)
+			
 			currentlyInTheMeeting = false
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
@@ -113,7 +117,8 @@ func RunReadEvent() {
 			line1 = utils.TimeNow().Format("15:04:05")
 			line1 += " "
 			line1 += event.Time
-			line2 = utils.PadString(event.Description, 16, " ")
+			// line2 = utils.PadString(event.Description, 16, " ")
+			line2 = event.Description
 		}
 		err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
 		utils.CheckError(err)
