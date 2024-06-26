@@ -77,8 +77,8 @@ func RunReadEvent() {
 
 	currentlyInTheMeeting := false
 	event := utils.ParseEvent()
-	lastCalled := utils.TimeNow()
 	for {
+		event = utils.ParseEvent()
 		if pin.EdgeDetected() { // check if event occured
 			fmt.Printf("[%s] Button press activated!\n", utils.TimeNow().Format("15:04:05"))
 			time.Sleep(time.Second)
@@ -97,17 +97,7 @@ func RunReadEvent() {
 		// Get new meeting to show if you just finished a meeting
 		if currentlyInTheMeeting && event.End.Before(now) {
 			currentlyInTheMeeting = false
-			event = utils.ParseEvent()
-			lastCalled = utils.TimeNow()
 		}
-		// Refresh current meeting every 2 minutes to track new meetings throughout the day
-		if now.Sub(lastCalled).Seconds() > 120 {
-			event = utils.ParseEvent()
-			lastCalled = utils.TimeNow()
-		}
-		
-		current_line1 = new_line1
-		current_line2 = new_line2
 
 		if !utils.DateEqual(event.Start, utils.TimeNow()) {
 			new_line1 = strings.Repeat(" ", 4)
@@ -121,11 +111,16 @@ func RunReadEvent() {
 			new_line1 += event.Time
 			new_line2 = event.Description
 		}
+		
+		// clear display if text has changed
 		if current_line1 != new_line1 || current_line2 != new_line2 {
-			// clear display if text has changed
 			err = lcd.Clear()
 			utils.CheckError(err)
 		}
+
+		current_line1 = new_line1
+		current_line2 = new_line2
+
 		err = lcd.ShowMessage(new_line1, device.SHOW_LINE_1)
 		utils.CheckError(err)
 		err = lcd.ShowMessage(new_line2, device.SHOW_LINE_2)
