@@ -24,8 +24,6 @@ var lg = logger.NewPackageLogger("read_event",
 
 var new_line1 = ""
 var new_line2 = ""
-var current_line1 = ""
-var current_line2 = ""
 
 var BACKLIGHT = true
 var ON = true
@@ -109,17 +107,8 @@ func RunReadEvent() {
 			new_line1 = utils.TimeNow().Format("15:04:05")
 			new_line1 += " "
 			new_line1 += event.Time
-			new_line2 = event.Description
+			new_line2 = utils.PadString(event.Description, 16, " ")
 		}
-		
-		// clear display if text has changed
-		if current_line1 != new_line1 || current_line2 != new_line2 {
-			err = lcd.Clear()
-			utils.CheckError(err)
-		}
-
-		current_line1 = new_line1
-		current_line2 = new_line2
 
 		err = lcd.ShowMessage(new_line1, device.SHOW_LINE_1)
 		utils.CheckError(err)
