@@ -24,6 +24,8 @@ var lg = logger.NewPackageLogger("read_event",
 
 var new_line1 = ""
 var new_line2 = ""
+var current_line1 = ""
+var current_line2 = ""
 
 var BACKLIGHT = true
 var ON = true
@@ -104,8 +106,8 @@ func RunReadEvent() {
 			lastCalled = utils.TimeNow()
 		}
 		
-		current_line1 := new_line1
-		current_line2 := new_line2
+		current_line1 = new_line1
+		current_line2 = new_line2
 
 		if !utils.DateEqual(event.Start, utils.TimeNow()) {
 			new_line1 = strings.Repeat(" ", 4)
