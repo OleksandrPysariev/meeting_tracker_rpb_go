@@ -22,6 +22,9 @@ var lg = logger.NewPackageLogger("read_event",
 	logger.InfoLevel,
 )
 
+var new_line1 = ""
+var new_line2 = ""
+
 var BACKLIGHT = true
 var ON = true
 
@@ -91,10 +94,6 @@ func RunReadEvent() {
 		}
 		// Get new meeting to show if you just finished a meeting
 		if currentlyInTheMeeting && event.End.Before(now) {
-			// clear display
-			err = lcd.Clear()
-			utils.CheckError(err)
-			
 			currentlyInTheMeeting = false
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
@@ -104,25 +103,30 @@ func RunReadEvent() {
 			event = utils.ParseEvent()
 			lastCalled = utils.TimeNow()
 		}
-		var (
-			line1, line2 string
-		)
+		
+		current_line1 := new_line1
+		current_line2 := new_line2
+
 		if !utils.DateEqual(event.Start, utils.TimeNow()) {
-			line1 = strings.Repeat(" ", 4)
-			line1 += utils.TimeNow().Format("15:04:05")
-			line1 += strings.Repeat(" ", 4)
+			new_line1 = strings.Repeat(" ", 4)
+			new_line1 += utils.TimeNow().Format("15:04:05")
+			new_line1 += strings.Repeat(" ", 4)
 			// lcd can't show empty message so " " is showed
-			line2 = strings.Repeat(" ", 16) // 16 empty strings to clear the line
+			new_line2 = strings.Repeat(" ", 16) // 16 empty strings to clear the line
 		} else {
-			line1 = utils.TimeNow().Format("15:04:05")
-			line1 += " "
-			line1 += event.Time
-			// line2 = utils.PadString(event.Description, 16, " ")
-			line2 = event.Description
+			new_line1 = utils.TimeNow().Format("15:04:05")
+			new_line1 += " "
+			new_line1 += event.Time
+			new_line2 = event.Description
 		}
-		err = lcd.ShowMessage(line1, device.SHOW_LINE_1)
+		if current_line1 != new_line1 || current_line2 != new_line2 {
+			// clear display if text has changed
+			err = lcd.Clear()
+			utils.CheckError(err)
+		}
+		err = lcd.ShowMessage(new_line1, device.SHOW_LINE_1)
 		utils.CheckError(err)
-		err = lcd.ShowMessage(line2, device.SHOW_LINE_2)
+		err = lcd.ShowMessage(new_line2, device.SHOW_LINE_2)
 		utils.CheckError(err)
 		time.Sleep(10 * time.Millisecond)
 	}
