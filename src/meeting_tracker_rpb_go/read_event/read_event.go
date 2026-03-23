@@ -2,8 +2,8 @@ package read_event
 
 import (
 	"fmt"
-	"time"
 	"strings"
+	"time"
 
 	device "github.com/d2r2/go-hd44780"
 	"github.com/d2r2/go-i2c"
@@ -97,7 +97,7 @@ func RunReadEvent() {
 			currentlyInTheMeeting = false
 		}
 
-		if !utils.DateEqual(event.Start, utils.TimeNow()) {
+		if !utils.DateEqual(event.Start, utils.TimeNow()) || event.Time == "" {
 			new_line1 = strings.Repeat(" ", 4)
 			new_line1 += utils.TimeNow().Format("15:04:05")
 			new_line1 += strings.Repeat(" ", 4)
