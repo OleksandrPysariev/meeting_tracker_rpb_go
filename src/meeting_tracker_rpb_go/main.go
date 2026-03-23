@@ -7,18 +7,20 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/read_event"
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/set_event"
+	"github.com/d2r2/go-logger"
 )
 
 var wg sync.WaitGroup
 
 func main() {
-	//logger.ChangePackageLogLevel("i2c", logger.InfoLevel)
+	logger.ChangePackageLogLevel("i2c", logger.InfoLevel)
 	fmt.Print("[main] Starting main\n")
 	wg.Add(1)
 	go set_event.RunSetEvent()
 	fmt.Print("[main] Ran RunSetEvent\n")
-	//go read_event.RunReadEvent()
+	go read_event.RunReadEvent()
 	fmt.Print("[main] Ran RunReadEvent\n")
 	wg.Wait()
 }
