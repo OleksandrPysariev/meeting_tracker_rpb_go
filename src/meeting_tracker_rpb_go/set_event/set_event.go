@@ -1,24 +1,30 @@
 package set_event
 
 import (
-	"time"
 	"fmt"
+	"time"
 
 	"github.com/OleksandrPysariev/meeting_tracker_rpb_go/set_event/utils"
 )
 
 func setEvent() {
-	// Yield response body
-	bodyBytes := utils.ReadResponseBody()
-	// Write body to event.json
+	bodyBytes, err := utils.GetCurrentEvent()
+	if err != nil {
+		fmt.Printf("[set_event] error getting event: %s\n", err)
+		return
+	}
 	utils.WriteBodyToFile(bodyBytes)
 }
 
 func RunSetEvent() {
 	fmt.Print("[set_event] Starting setEvent...\n")
+	if err := utils.InitCalendarService(); err != nil {
+		fmt.Printf("[set_event] Failed to initialize Google Calendar service: %s\n", err)
+		return
+	}
+	fmt.Print("[set_event] Google Calendar service initialized.\n")
 	for {
 		setEvent()
-		// fmt.Print("[set_event] event.json stored!\n")
 		time.Sleep(60 * time.Second)
 	}
 }
