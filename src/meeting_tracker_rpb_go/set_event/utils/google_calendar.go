@@ -13,7 +13,7 @@ import (
 
 const (
 	serviceAccountFile = "service.json"
-	workCalendarID     = "oleksandr.pysariev@vimmi.net"
+	workCalendarID     = "oleksandrpysariev@materialspace.io"
 	personalCalendarID = "apalexlife@gmail.com"
 )
 
